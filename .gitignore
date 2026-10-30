@@ -1,0 +1,14 @@
+.venv/
+BackEnd/venv/
+FrontEnd/node_modules/
+FrontEnd/dist/
+.vercel/
+__pycache__/
+**/__pycache__/
+*.py[cod]
+*.db
+*.db-shm
+*.db-wal
+.env
+.env.*
+!.env.example
