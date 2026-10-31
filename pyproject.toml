@@ -9,5 +9,3 @@ entrypoint = "BackEnd.main:app"
 [tool.vercel.scripts]
 build = "python build_frontend.py"
 
-[tool.vercel.fastapi.static]
-exclude = true

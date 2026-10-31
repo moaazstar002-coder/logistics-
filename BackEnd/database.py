@@ -1,9 +1,17 @@
 import os
+from pathlib import Path
 
+from dotenv import load_dotenv
 from sqlalchemy import create_engine, inspect, text
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy.pool import NullPool
+
+PROJECT_ROOT = Path(__file__).resolve().parents[1]
+env_file = PROJECT_ROOT / ".env"
+if not env_file.is_file():
+    env_file = PROJECT_ROOT / ".env.local"
+load_dotenv(env_file, override=False)
 
 SQLALCHEMY_DATABASE_URL = os.getenv("LOGISTICS_DATABASE_URL") or os.getenv(
     "DATABASE_URL"

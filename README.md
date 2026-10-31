@@ -1,5 +1,22 @@
 # Masar Logistics Dashboard
 
+## Neon Postgres
+
+The Neon project configuration is in `neon.ts` and `.neon`. From the `first`
+directory, sign in and deploy the declared Postgres service:
+
+```powershell
+npm install --global neon@latest
+neon login
+neon deploy
+```
+
+`neon deploy` writes the pooled `DATABASE_URL` and direct
+`DATABASE_URL_UNPOOLED` to `.env.local` (or `.env` if that file already
+exists). The backend loads that file without overriding environment variables.
+It uses the pooled URL for application requests; use the direct URL for
+migrations and administrative operations. These env files are ignored by Git.
+
 ## Deploy the complete app to Vercel
 
 The project is configured as one Vercel deployment: Vercel builds the React
@@ -19,13 +36,13 @@ not used or uploaded in production.
    Production, Preview, and Development:
 
    ```text
-   LOGISTICS_DATABASE_URL=postgresql://...
+   DATABASE_URL=postgresql://...
    LOGISTICS_COOKIE_SECURE=true
    ```
 
-   Use the connection string provided by your database service. Both
-   `postgresql://` and `postgres://` URLs are configured to use the Psycopg
-   driver.
+   Use Neon's pooled connection string for `DATABASE_URL`. The app also
+   accepts `LOGISTICS_DATABASE_URL`; both `postgresql://` and `postgres://`
+   URLs are configured to use the Psycopg driver.
 5. Deploy. The database tables are initialized automatically. Open `/register`
    on the deployed site to create your account, then sign in at `/login`.
    Vercel provides HTTPS, and the session cookie is restricted to HTTPS.
@@ -45,10 +62,15 @@ accounts; never upload `logistics.db` to Git.
 From the `first` directory in PowerShell:
 
 ```powershell
+# Use the local SQLite database:
 $env:LOGISTICS_DATABASE_URL = "sqlite:///./BackEnd/logistics.db"
 .\BackEnd\venv\Scripts\python.exe -m pip install -r requirements.txt
 .\BackEnd\venv\Scripts\python.exe -m uvicorn BackEnd.main:app --reload
 ```
+
+To run locally against Neon instead, deploy/pull the Neon environment first and
+leave `LOGISTICS_DATABASE_URL` unset; the backend loads `DATABASE_URL` from
+`.env.local` or `.env`.
 
 In another terminal:
 

@@ -3,3 +3,4 @@ uvicorn
 sqlalchemy
 pydantic
 argon2-cffi>=23.1.0,<26
+python-dotenv>=1.0,<2
