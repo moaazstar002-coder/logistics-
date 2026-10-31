@@ -1,3 +1,4 @@
+from contextlib import asynccontextmanager
 import os
 
 from fastapi import Depends, FastAPI, HTTPException, Query, Request, Response, status
@@ -11,9 +12,18 @@ else:
     import auth, models, schemas
     from database import get_db, initialize_database
 
-initialize_database()
 
-app = FastAPI(title="Logistics & Fleet API", version="1.0")
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    initialize_database()
+    yield
+
+
+app = FastAPI(
+    title="Logistics & Fleet API",
+    version="1.0",
+    lifespan=lifespan,
+)
 
 
 @app.post(
